@@ -88,6 +88,11 @@ Set `CORS_ORIGINS` to the exact deployed Vercel site origin (for example,
 `https://your-project.vercel.app`); do not include a path or trailing slash.
 Keep AI and Supabase keys in the backend host only.
 
+This repository pins Python 3.11.11 because CrewAI 1.x requires Python below
+3.14, while newer Render services default to Python 3.14. If you created the
+service manually rather than from `render.yaml`, set its `PYTHON_VERSION`
+environment variable to `3.11.11` and redeploy.
+
 After the backend is healthy at `https://<backend-host>`, add
 `VITE_API_BASE_URL=https://<backend-host>` to the Vercel project's Production
 environment variables and redeploy the frontend. The Vercel build must include
