@@ -61,6 +61,9 @@ retrieves relevant passages before the assistant responds. If no guide documents
 have been ingested or vector search is unavailable, the assistant retrieves up to
 four relevant chunks from the bundled agriculture guide instead of sending the
 entire guide to the model.
+The embedding model warms in the background after the API starts. While it loads,
+chat requests use the bundled guide so the first question does not wait for the
+model download; `/api/health` reports the embedding model state.
 To index the guide in Supabase for vector retrieval, set a Supabase service-role
 or secret key locally and run `python -m app.ingest` from `backend/`. The first
 ingestion downloads the embedding model. `/api/health` reports missing backend
