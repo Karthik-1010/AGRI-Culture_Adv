@@ -64,6 +64,8 @@ export function AiAssistant() {
         throw new Error(
           response.ok
             ? 'The assistant returned an invalid response. Please try again.'
+            : response.status === 404
+              ? 'The GreenHarvest API endpoint was not found. Deploy the backend and set VITE_API_BASE_URL to its URL in Vercel, then redeploy the frontend.'
             : `The assistant service failed (HTTP ${response.status}). Check the backend logs.`,
         );
       }
@@ -92,7 +94,7 @@ export function AiAssistant() {
       ]);
     } catch (requestError) {
       setError(requestError instanceof TypeError
-        ? 'Cannot connect to the GreenHarvest API. Start the backend with the README instructions, then try again.'
+        ? 'Cannot connect to the GreenHarvest API. Start the backend locally or configure VITE_API_BASE_URL to your deployed backend URL.'
         : requestError instanceof Error
           ? requestError.message
           : 'Unable to reach the agriculture assistant. Please try again.');

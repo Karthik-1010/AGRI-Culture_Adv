@@ -44,6 +44,8 @@ export function LandLocator() {
         throw new Error(
           response.ok
             ? 'The location service returned an invalid response. Please try again.'
+            : response.status === 404
+              ? 'The GreenHarvest API endpoint was not found. Deploy the backend and set VITE_API_BASE_URL to its URL in Vercel, then redeploy the frontend.'
             : `Location search failed (HTTP ${response.status}). Check the backend logs.`,
         );
       }
@@ -71,7 +73,7 @@ export function LandLocator() {
       });
     } catch (searchError) {
       setError(searchError instanceof TypeError
-        ? 'Cannot connect to the GreenHarvest API. Start the backend with the README instructions, then try again.'
+        ? 'Cannot connect to the GreenHarvest API. Start the backend locally or configure VITE_API_BASE_URL to your deployed backend URL.'
         : searchError instanceof Error
           ? searchError.message
           : 'Unable to search this location right now.');
