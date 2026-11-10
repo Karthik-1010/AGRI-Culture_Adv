@@ -79,6 +79,22 @@ For a deployed frontend, set `VITE_API_BASE_URL` to the backend origin at build
 time. Configure rate limiting and authentication at the API gateway before
 public production deployment.
 
+## Deploy the backend for Vercel
+
+Vercel hosts the Vite frontend; it does not run this FastAPI application. Deploy
+the backend separately using the root `render.yaml` blueprint. In Render, set
+`GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `CORS_ORIGINS`.
+Set `CORS_ORIGINS` to the exact deployed Vercel site origin (for example,
+`https://your-project.vercel.app`); do not include a path or trailing slash.
+Keep AI and Supabase keys in the backend host only.
+
+After the backend is healthy at `https://<backend-host>`, add
+`VITE_API_BASE_URL=https://<backend-host>` to the Vercel project's Production
+environment variables and redeploy the frontend. The Vercel build must include
+this variable because Vite embeds it at build time. Confirm
+`https://<backend-host>/api/health` returns JSON before testing chat or map
+search. Map search also requires the Supabase URL/key and the migrations above.
+
 ## Verification
 
 Run `npm run build` and `npm run lint` from the project root. To exercise the full
