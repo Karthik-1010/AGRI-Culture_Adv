@@ -81,8 +81,10 @@ public production deployment.
 
 ## Deploy the backend for Vercel
 
-Vercel hosts the Vite frontend; it does not run this FastAPI application. Deploy
-the backend separately using the root `render.yaml` blueprint. In Render, set
+Vercel hosts the Vite frontend; it does not run this FastAPI application. The
+root `vercel.json` forwards `/api/*` requests to the Render API, so chat and map
+requests use the same origin in the browser. Deploy the backend separately using
+the root `render.yaml` blueprint. In Render, set
 `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `CORS_ORIGINS`.
 Set `CORS_ORIGINS` to the exact deployed Vercel site origin (for example,
 `https://your-project.vercel.app`); do not include a path or trailing slash.
@@ -93,10 +95,8 @@ This repository pins Python 3.11.11 because CrewAI 1.x requires Python below
 service manually rather than from `render.yaml`, set its `PYTHON_VERSION`
 environment variable to `3.11.11` and redeploy.
 
-After the backend is healthy at `https://<backend-host>`, add
-`VITE_API_BASE_URL=https://<backend-host>` to the Vercel project's Production
-environment variables and redeploy the frontend. The Vercel build must include
-this variable because Vite embeds it at build time. Confirm
+The Render URL in `vercel.json` must match the deployed backend's public URL.
+After the backend is healthy at `https://<backend-host>`, confirm
 `https://<backend-host>/api/health` returns JSON before testing chat or map
 search. Map search also requires the Supabase URL/key and the migrations above.
 
